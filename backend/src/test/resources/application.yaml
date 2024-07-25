@@ -5,6 +5,12 @@ spring:
   application:
     name: 'around the korea'
 
+jasypt:
+  key: ${JASYPT_KEY}
+
+data:
+  service-key: ENC(X+zbIcHSkczCFiquZUJwqEUwwOKcfbuF+XUDyhMiq3IPZIMQhFjD/rd5P+B/XVwlm0frRvgJZHDR8FjQCt75VSlLNajHEes2TP/zCcX7eDqhfrDVlS62aaJpJSADPywmHnoLfXQNAEI=)
+
 logging:
   level:
     request: debug
