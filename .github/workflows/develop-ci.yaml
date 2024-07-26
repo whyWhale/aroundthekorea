@@ -58,8 +58,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./aroundthekorea
-          file: ./aroundthekorea/Dockerfile-dev
+          context: ./backend
+          file: ./backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/aroundthekorea-backend:latest
           platforms: linux/amd64
