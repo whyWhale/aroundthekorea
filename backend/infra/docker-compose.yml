@@ -1,0 +1,13 @@
+services:
+  database:
+    image: mysql:5.7
+    platform: linux/amd64
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: aroundthekorea
+    volumes:
+      - ./database/db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
