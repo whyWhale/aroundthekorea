@@ -4,8 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --mode dev",
-    "prod": "vite --mode prod",
+    "predev": "NODE_ENV=dev node decrypt.js",
+    "dev": "vite --mode development",
+    "preprod": "NODE_ENV=prod node decrypt.js",
+    "prod": "vite --mode production",
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -14,6 +16,7 @@
   },
   "dependencies": {
     "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3",
