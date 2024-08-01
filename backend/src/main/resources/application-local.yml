@@ -1,0 +1,18 @@
+server:
+  port: ENC(sR896rIzKHi4bGYnvr0VoQ==)
+  ssl:
+    key-store: ENC(Ji+6HBUVeQAAVNieWN6uLquh54lqWwrPFDWtf2/TUPo=)
+    key-store-password: ENC(BXalHHYPU9Dw0FnC3l0/sQ==)
+    key-store-type: ENC(8uGWQ7QH6oyp9+u6R9NPXA==)
+    key-alias: ENC(UF4MtNO5t9ljS3a/43Yb/k10PclUMdR4)
+spring:
+  cors:
+    allow-origins:
+      - ENC(o4u19wOUQNasEc7QQ0OHqcEb1Vskl2isnuP5x88Nrcs=)
+      - ENC(WaI6mE9sUc5hr4HEq0SQBIIzMVf0jlQo21W2e5tssEs=)
+
+jasypt:
+  key: ${JASYPT_KEY}
+
+data:
+  service-key: ENC(X+zbIcHSkczCFiquZUJwqEUwwOKcfbuF+XUDyhMiq3IPZIMQhFjD/rd5P+B/XVwlm0frRvgJZHDR8FjQCt75VSlLNajHEes2TP/zCcX7eDqhfrDVlS62aaJpJSADPywmHnoLfXQNAEI=)

@@ -1,9 +1,8 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: 'around the korea'
+  profiles:
+    active: local
 
 jasypt:
   key: ${JASYPT_KEY}
