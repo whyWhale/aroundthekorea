@@ -29,3 +29,7 @@ coverage
 
 *.tsbuildinfo
 .env**
+
+# infra
+./infra/https_certification
+./infra/nginx/entrypoint.sh

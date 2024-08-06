@@ -3,7 +3,7 @@
 # Compiled class file
 *.class
 
-https_certification/
+front/infra/https_certification/
 # Log file
 *.log
 

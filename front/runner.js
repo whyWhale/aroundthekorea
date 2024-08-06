@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import {createServer} from 'vite';
+import { execSync } from 'child_process'
 
 dotenv.config();
 const secretKey = process.env.VITE_SECRET_KEY;
@@ -51,16 +51,37 @@ const load = async () => {
     await Promise.all(promises);
 }
 
-load()
-    .then(async () => {
-        console.log('========== Starting Vite =========='); // Vite 시작 로그
-        const server = await createServer();
-        await server.listen();
-        const address = server.httpServer.address();
-        console.log(`Vite dev server is url => ${address.address}:${address.port}`);
-    }).catch((error) => {
-    console.error('-- Error -- \n:', error);
-});
+const run = async () => {
+    await load()
+    console.log('Decryption complete.')
+
+    // 현재 실행 중인 npm 스크립트를 확인하여 빌드 또는 개발 서버를 실행
+    const isBuild = process.env.BUILD_MODE === 'true';
+    if (isBuild) {
+        console.log('========== Starting Build ==========') // Build 시작 로그
+        execSync('vite build', { stdio: 'inherit' })
+    } else {
+        execSync('vite', { stdio: 'inherit' })
+    }
+}
+
+run().catch((error) => {
+    console.error('-- Error -- \n:', error)
+    process.exit(1)
+})
+
+// load()
+//     .then(async () => {
+//         const npmScript = process.env.npm_lifecycle_event;
+//         console.log(npmScript)
+//         console.log('========== Starting Vite =========='); // Vite 시작 로그
+//         const server = await createServer();
+//         await server.listen();
+//         const address = server.httpServer.address();
+//         console.log(`Vite dev server is url => ${address.address}:${address.port}`);
+//     }).catch((error) => {
+//     console.error('-- Error -- \n:', error);
+// });
 
 
 
