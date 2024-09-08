@@ -28,8 +28,11 @@ class HelloControllerTest {
 	@DisplayName("등록한 사용자를 헤더정보에 담으면 접근할 수 있다.")
 	void testHello() throws Exception {
 		//given
+		String username = "whyWhale";
+		String password = "aroundthekorea";
+		String toEncoding = username + ":" + password;
 		String encodedUser = Base64.getEncoder()
-			.encodeToString("whyWhale:aroundthekorea".getBytes());
+			.encodeToString(toEncoding.getBytes());
 		String authorizationValue = "Basic " + encodedUser;
 		//when
 		ResultActions perform = mockMvc.perform(
@@ -41,7 +44,7 @@ class HelloControllerTest {
 		perform.andExpect(status().isOk())
 			.andDo(log());
 		String body = perform.andReturn().getResponse().getContentAsString();
-		assertThat(body).isEqualTo("hello world");
+		assertThat(body).isEqualTo(username);
 	}
 
 	@Test

@@ -15,7 +15,7 @@ import com.travel.aroundthekorea.config.constant.CorsProperties;
 @EnableConfigurationProperties(CorsProperties.class)
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-	private  CorsProperties corsProperties;
+	private CorsProperties corsProperties;
 
 	public WebConfig(CorsProperties corsProperties) {
 		this.corsProperties = corsProperties;
@@ -25,13 +25,13 @@ public class WebConfig implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
 			.allowedOrigins(corsProperties.allowOrigins().toArray(String[]::new))
-			.allowedMethods(getMethod())
+			.allowedMethods(this.getMethod())
 			.allowedHeaders("*")
 			.allowCredentials(true)
 			.maxAge(3600);
 	}
 
-	private static String[] getMethod() {
+	private String[] getMethod() {
 		return Arrays.stream(HttpMethod.values())
 			.map(HttpMethod::name)
 			.toArray(String[]::new);

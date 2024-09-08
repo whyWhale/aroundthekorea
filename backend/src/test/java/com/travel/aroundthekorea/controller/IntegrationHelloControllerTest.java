@@ -22,23 +22,26 @@ class IntegrationHelloControllerTest {
 	@DisplayName("등록한 사용자를 헤더정보에 담으면 접근할 수 있다.")
 	void testHello() {
 		//given
+		String username = "whyWhale";
+		String password = "aroundthekorea";
+		String toEncoding = username + ":" + password;
 		String encodedUser = Base64.getEncoder()
-			.encodeToString("whyWhale:aroundthekorea".getBytes());
+			.encodeToString(toEncoding.getBytes());
 		String authorizationValue = "Basic " + encodedUser;
+		Header authorizationHeader = new Header("Authorization", authorizationValue);
 		//when
 		//then
-		Header authorizationHeader = new Header("Authorization", authorizationValue);
 		given().port(port).header(authorizationHeader)
 			.when().get("/hello")
 			.then().log().all()
 			.statusCode(HttpStatus.OK.value())
 			.assertThat()
-			.body(Matchers.is("hello world"));
+			.body(Matchers.is(username));
 	}
 
 	@Test
 	@DisplayName("등록한 사용자에 대한 헤더 정보가 없으면 접근할 수 없다")
-	void failHello(){
+	void failHello() {
 		//given
 		//when
 		//then

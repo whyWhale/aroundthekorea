@@ -4,6 +4,17 @@ spring:
   profiles:
     active: local
 
+openapi:
+  info:
+    title: "✈️가보자구! API 명세서"
+    version: "1.0.0"
+    description: "가보자구✈️ api를 호출하기 위해서는 오른쪽 Authorize 잠금을 클릭후 아이디와 비밀번호를 입력하셔야 해요️ 🔐 with Basic Authentication"
+  security:
+    scheme: "basicAuth"
+    type: "http"
+    schemeName: "basic"
+    description: "API를 호출하기 위해 앞에 basic 이라는 키워드와 base64로 인코딩된 정보가 필요해요!"
+
 jasypt:
   key: ${JASYPT_KEY}
 

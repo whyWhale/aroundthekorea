@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 public class SecurityConfig {
@@ -26,6 +27,11 @@ public class SecurityConfig {
 		return new InMemoryUserDetailsManager(demoUser);
 	}
 
+	@Bean
+	public HttpSessionEventPublisher httpSessionEventPublisher() {
+		return new HttpSessionEventPublisher();
+	}
+
 	@SuppressWarnings("deprecation")
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -33,10 +39,18 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 			.httpBasic(Customizer.withDefaults())
-			.authorizeHttpRequests(c -> c.anyRequest().authenticated())
+			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+				.anyRequest().authenticated()
+			)
+			.formLogin(form -> form.disable())
+			.logout(logout -> logout.disable())
+			.sessionManagement(session -> session
+				.sessionFixation().migrateSession()
+			)
 			.build();
 	}
 }
