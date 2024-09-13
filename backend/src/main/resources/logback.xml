@@ -7,12 +7,14 @@
         <include resource="logback/file-db-appender.xml" />
         <include resource="logback/file-error-appender.xml" />
         <include resource="logback/file-warn-appender.xml" />
+        <include resource="logback/logstash-appender.xml" />
 
         <root level="DEBUG">
             <appender-ref ref="ASYNC_CONSOLE" />
             <appender-ref ref="ASYNC_DB_FILE" />
             <appender-ref ref="ASYNC_ERROR_FILE" />
             <appender-ref ref="ASYNC_WARN_FILE" />
+            <appender-ref ref="ASYNC_LOGSTASH" />
         </root>
     </springProfile>
 
@@ -25,6 +27,7 @@
         <root level="INFO">
             <appender-ref ref="ASYNC_DB_FILE" />
             <appender-ref ref="ASYNC_ERROR_FILE" />
+            <appender-ref ref="ASYNC_LOGSTASH" />
         </root>
     </springProfile>
 

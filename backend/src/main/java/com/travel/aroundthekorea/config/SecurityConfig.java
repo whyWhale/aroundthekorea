@@ -1,5 +1,7 @@
 package com.travel.aroundthekorea.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -14,6 +16,8 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 public class SecurityConfig {
+
+	private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
 	@Bean
 	UserDetailsService userDetailsService() {
@@ -43,7 +47,7 @@ public class SecurityConfig {
 		return http
 			.httpBasic(Customizer.withDefaults())
 			.authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/test").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin(form -> form.disable())
