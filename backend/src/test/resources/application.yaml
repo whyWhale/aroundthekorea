@@ -5,15 +5,13 @@ spring:
   application:
     name: 'around the korea'
 
+  sql:
+    init:
+      schema-locations: classpath:batch-schema-h2.sql
+      mode: always
+
 jasypt:
   key: ${JASYPT_KEY}
 
 data:
   service-key: ENC(X+zbIcHSkczCFiquZUJwqEUwwOKcfbuF+XUDyhMiq3IPZIMQhFjD/rd5P+B/XVwlm0frRvgJZHDR8FjQCt75VSlLNajHEes2TP/zCcX7eDqhfrDVlS62aaJpJSADPywmHnoLfXQNAEI=)
-
-logging:
-  level:
-    request: debug
-  group:
-    request:
-      - org.springframework.test.web.servlet.result

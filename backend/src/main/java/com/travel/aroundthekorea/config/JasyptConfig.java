@@ -12,7 +12,7 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 
 @Configuration
 @EnableEncryptableProperties
-@Profile({"local", "prod"})
+@Profile({"local", "prod", "test"})
 public class JasyptConfig {
 
 	@Value("${jasypt.key}")

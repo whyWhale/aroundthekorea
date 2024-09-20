@@ -39,7 +39,7 @@ jobs:
       - name: Test with Gradle
         run: |
           cd ./backend
-          ./gradlew test
+          JASYPT_KEY=${{secrets.JASYPT_KEY}} ./gradlew clean test
 
       - name: Build with Gradle
         run: |
