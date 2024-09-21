@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.travel.aroundthekorea.exception.model.BatchException;
 import com.travel.aroundthekorea.exception.model.ErrorMessage;
 
+import feign.FeignException;
+import feign.RetryableException;
+
 @RestControllerAdvice
 public class GlobalException {
 
@@ -26,6 +29,29 @@ public class GlobalException {
 			.type(URI.create("https://atk-monitor.com/errors/batch-error"))
 			.title("[긴급] 관리자 호출")
 			.detail(errorModel.getClient())
+			.build();
+
+		return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
+	}
+
+	@ExceptionHandler(FeignException.class)
+	public ResponseEntity<ErrorResponse> handleFeignException(FeignException e) {
+		if (e instanceof RetryableException) {
+			log.error("Feign Retryable exception: {}", e.getMessage());
+			ErrorResponse response = ErrorResponse.builder(e, HttpStatus.GATEWAY_TIMEOUT, "Retry Error")
+				.type(URI.create("https://atk-monitor.com/errors/retry-error"))
+				.title("재시도 실패")
+				.detail(e.getMessage())
+				.build();
+
+			return new ResponseEntity<>(response, HttpStatus.GATEWAY_TIMEOUT);
+		}
+
+		log.error("Feign exception occurred: {}", e.getMessage());
+		ErrorResponse response = ErrorResponse.builder(e, HttpStatus.SERVICE_UNAVAILABLE, "Feign API Error")
+			.type(URI.create("https://atk-monitor.com/errors/feign-error"))
+			.title("Feign API 호출 오류")
+			.detail(e.getMessage())
 			.build();
 
 		return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);

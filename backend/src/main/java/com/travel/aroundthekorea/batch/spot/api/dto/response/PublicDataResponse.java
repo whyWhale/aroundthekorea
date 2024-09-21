@@ -1,4 +1,4 @@
-package com.travel.aroundthekorea.batch.spot.api.dto;
+package com.travel.aroundthekorea.batch.spot.api.dto.response;
 
 import java.util.List;
 

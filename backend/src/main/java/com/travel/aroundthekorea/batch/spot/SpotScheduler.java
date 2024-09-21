@@ -25,7 +25,7 @@ public class SpotScheduler {
 
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void runImportSpot() {
-		LongStream.rangeClosed(1, 80)
+		LongStream.rangeClosed(1, 80).parallel()
 			.forEach(pageNumber -> {
 				JobParameters jobParameters = new JobParametersBuilder()
 					.addLong("time", System.currentTimeMillis())

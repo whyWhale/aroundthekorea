@@ -9,6 +9,31 @@ spring:
     init:
       schema-locations: classpath:batch-schema-h2.sql
       mode: always
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      spotDataApi:
+        failure-rate-threshold: 99
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+        retryer:
+          period: 2000
+          maxPeriod: 3000
+          maxAttempts: 7
 
 jasypt:
   key: ${JASYPT_KEY}

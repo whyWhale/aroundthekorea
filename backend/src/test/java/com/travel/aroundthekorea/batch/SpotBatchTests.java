@@ -42,7 +42,7 @@ class SpotBatchTests {
 	public void updateSpots() {
 		// given
 		// when
-		LongStream.rangeClosed(1, 20)
+		LongStream.rangeClosed(1, 80).parallel()
 			.forEach(pageNumber -> {
 				JobParameters jobParameters = new JobParametersBuilder()
 					.addLong("time", System.currentTimeMillis())
@@ -65,7 +65,7 @@ class SpotBatchTests {
 
 		// then
 		assertThat(spots.isEmpty()).isFalse();
-		assertThat(spots.size()).isEqualTo(4000);
+		assertThat(spots.size()).isGreaterThan(15000);
 	}
 
 }

@@ -21,6 +21,7 @@ public class SpotItemWriter<T> implements ItemWriter<List<T>> {
 
 	@Override
 	public void write(Chunk<? extends List<T>> chunk) throws Exception {
+		log.info("[BATCH: spot] - write chunk");
 		for (List<T> ts : chunk) {
 			ts.stream().forEach(v -> {
 				try {

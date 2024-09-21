@@ -1,6 +1,6 @@
 package com.travel.aroundthekorea.batch.spot.mechanism;
 
-import static com.travel.aroundthekorea.batch.spot.api.dto.PublicDataResponse.*;
+import static com.travel.aroundthekorea.batch.spot.api.dto.response.PublicDataResponse.*;
 
 import java.util.List;
 

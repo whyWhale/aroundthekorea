@@ -25,7 +25,7 @@ import com.travel.aroundthekorea.batch.spot.mechanism.SpotItemProcessor;
 import com.travel.aroundthekorea.batch.spot.mechanism.SpotItemReader;
 import com.travel.aroundthekorea.batch.spot.mechanism.SpotItemWriter;
 import com.travel.aroundthekorea.batch.spot.api.SpotClient;
-import com.travel.aroundthekorea.batch.spot.api.dto.PublicDataResponse;
+import com.travel.aroundthekorea.batch.spot.api.dto.response.PublicDataResponse;
 import com.travel.aroundthekorea.batch.spot.listener.JobCompletionNotificationListener;
 import com.travel.aroundthekorea.tour.domain.Spot;
 
