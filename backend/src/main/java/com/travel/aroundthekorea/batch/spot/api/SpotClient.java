@@ -1,5 +1,7 @@
 package com.travel.aroundthekorea.batch.spot.api;
 
+import static com.travel.aroundthekorea.exception.model.ErrorMessage.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,7 +15,6 @@ import com.travel.aroundthekorea.common.context.RequestContext;
 import com.travel.aroundthekorea.common.context.SpringContext;
 import com.travel.aroundthekorea.config.FeignConfig;
 import com.travel.aroundthekorea.exception.model.BatchException;
-import com.travel.aroundthekorea.exception.model.ErrorMessage;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
@@ -38,12 +39,12 @@ public interface SpotClient {
 		@RequestParam("arrange") String order
 	);
 
-	default PublicDataResponse finalize(Throwable t) {
+	default PublicDataResponse finalize(Throwable throwable) throws BatchException {
 		RequestContext<SpotClientRequestDto> requestContext = SpringContext.getBean(RequestContext.class);
 		SpotClientFallback spotClientFallback = SpringContext.getBean(SpotClientFallback.class);
 		SpotClientRequestDto requestData = requestContext.get();
 		log.warn("[CircuitBreaker execute]: numOfRows={}, pageNo={}, serviceKey={}, error: {}",
-			requestData.numOfRows(), requestData.pageNo(), requestData.serviceKey(), t.getMessage());
+			requestData.numOfRows(), requestData.pageNo(), requestData.serviceKey(), throwable.getMessage());
 
 		if (requestData != null) {
 			PublicDataResponse replacements = spotClientFallback.getSpots(
@@ -58,9 +59,12 @@ public interface SpotClient {
 
 			return replacements;
 		} else {
-			log.error("[CircuitBreaker Fallback] fail: ThreadLocal empty... , error throwable: {}", t.getMessage());
-			throw new BatchException("ThreadLocal empty... Fallback Fail",
-				t, ErrorMessage.BATCH_BATCH_CIRCUIT_BREAKER_FALLBACK);
+			log.error("[CircuitBreaker Fallback] fail: ThreadLocal empty... , error throwable: {}",
+				throwable.getMessage());
+			throw new BatchException(
+				"ThreadLocal empty... Fallback Fail",
+				throwable,
+				BATCH_CIRCUIT_BREAKER_FALLBACK);
 		}
 	}
 }

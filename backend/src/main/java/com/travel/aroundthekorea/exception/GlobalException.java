@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.travel.aroundthekorea.exception.model.BatchException;
+import com.travel.aroundthekorea.exception.model.CustomFeignException;
 import com.travel.aroundthekorea.exception.model.ErrorMessage;
 
 import feign.FeignException;
@@ -51,6 +52,19 @@ public class GlobalException {
 		ErrorResponse response = ErrorResponse.builder(e, HttpStatus.SERVICE_UNAVAILABLE, "Feign API Error")
 			.type(URI.create("https://atk-monitor.com/errors/feign-error"))
 			.title("Feign API 호출 오류")
+			.detail(e.getMessage())
+			.build();
+
+		return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
+	}
+
+	@ExceptionHandler(CustomFeignException.class)
+	public ResponseEntity<ErrorResponse> handleFeignException(CustomFeignException e) {
+		ErrorMessage errorModel = e.getErrorModel();
+		log.error("Feign Decode exception occurred: {}, raw message: {}", errorModel.getServer(), e.getMessage());
+		ErrorResponse response = ErrorResponse.builder(e, HttpStatus.SERVICE_UNAVAILABLE, "Feign API Error")
+			.type(URI.create("https://atk-monitor.com/errors/feign-error"))
+			.title(e.getErrorModel().getClient())
 			.detail(e.getMessage())
 			.build();
 

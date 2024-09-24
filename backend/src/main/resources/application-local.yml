@@ -45,7 +45,7 @@ jasypt:
   key: ${JASYPT_KEY}
 
 data:
-  service-key: ENC(X+zbIcHSkczCFiquZUJwqEUwwOKcfbuF+XUDyhMiq3IPZIMQhFjD/rd5P+B/XVwlm0frRvgJZHDR8FjQCt75VSlLNajHEes2TP/zCcX7eDqhfrDVlS62aaJpJSADPywmHnoLfXQNAEI=)
+  service-key: ENC(jOb1cSvWST3a6Bm51spNE5IM1SAEI/BiLzjLiSS+vFb69jVlhwiiveMy4Tom13XA/wuSIS4n4aP+CkkY1syae+gCBEzDT9WQ5lxuuhv01fXh0oLrrp6ynNiHvLfn5IKCqZ5EK6YPyxFRTdqoVzRI4g==)
 
 logging:
   level:

@@ -5,11 +5,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.travel.aroundthekorea.batch.spot.api.decoder.CustomErrorDecoder;
 import com.travel.aroundthekorea.config.constant.FeignProperties;
-
 import feign.Feign;
 import feign.Request;
 import feign.Retryer;
+import feign.codec.ErrorDecoder;
 
 @EnableFeignClients(basePackages = "com.travel.aroundthekorea.batch.spot.api")
 @EnableConfigurationProperties(FeignProperties.class)
@@ -19,6 +20,11 @@ public class FeignConfig {
 
 	public FeignConfig(FeignProperties feignProperties) {
 		this.feignProperties = feignProperties;
+	}
+
+	@Bean
+	public ErrorDecoder errorDecoder() {
+		return new CustomErrorDecoder();
 	}
 
 	@Bean
