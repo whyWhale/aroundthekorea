@@ -20,7 +20,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @FeignClient(
 	name = "SpotClient",
-	url = "https://apis.data.go.kr/B551011/KorService1",
+	url = "${data.url}",
 	configuration = FeignConfig.class,
 	fallback = SpotClientFallback.class
 )
@@ -43,28 +43,26 @@ public interface SpotClient {
 		RequestContext<SpotClientRequestDto> requestContext = SpringContext.getBean(RequestContext.class);
 		SpotClientFallback spotClientFallback = SpringContext.getBean(SpotClientFallback.class);
 		SpotClientRequestDto requestData = requestContext.get();
-		log.warn("[CircuitBreaker execute]: numOfRows={}, pageNo={}, serviceKey={}, error: {}",
-			requestData.numOfRows(), requestData.pageNo(), requestData.serviceKey(), throwable.getMessage());
 
-		if (requestData != null) {
-			PublicDataResponse replacements = spotClientFallback.getSpots(
-				requestData.numOfRows(),
-				requestData.pageNo(),
-				requestData.mobileOS(),
-				requestData.mobileApp(),
-				requestData.type(),
-				requestData.serviceKey(),
-				requestData.order()
-			);
-
-			return replacements;
-		} else {
+		if (requestData == null) {
 			log.error("[CircuitBreaker Fallback] fail: ThreadLocal empty... , error throwable: {}",
 				throwable.getMessage());
-			throw new BatchException(
-				"ThreadLocal empty... Fallback Fail",
-				throwable,
-				BATCH_CIRCUIT_BREAKER_FALLBACK);
+			requestContext.clear();
+			throw new BatchException("ThreadLocal empty... Fallback Fail", throwable, BATCH_CIRCUIT_BREAKER_FALLBACK);
 		}
+
+		log.warn("[CircuitBreaker execute]: numOfRows={}, pageNo={}, serviceKey={}, error: {}",
+			requestData.numOfRows(), requestData.pageNo(), requestData.serviceKey(), throwable.getMessage());
+		PublicDataResponse replacements = spotClientFallback.getSpots(
+			requestData.numOfRows(),
+			requestData.pageNo(),
+			requestData.mobileOS(),
+			requestData.mobileApp(),
+			requestData.type(),
+			requestData.serviceKey(),
+			requestData.order());
+		requestContext.clear();
+
+		return replacements;
 	}
 }

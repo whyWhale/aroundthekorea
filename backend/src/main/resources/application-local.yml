@@ -46,6 +46,7 @@ jasypt:
 
 data:
   service-key: ENC(jOb1cSvWST3a6Bm51spNE5IM1SAEI/BiLzjLiSS+vFb69jVlhwiiveMy4Tom13XA/wuSIS4n4aP+CkkY1syae+gCBEzDT9WQ5lxuuhv01fXh0oLrrp6ynNiHvLfn5IKCqZ5EK6YPyxFRTdqoVzRI4g==)
+  url: https://apis.data.go.kr/B551011/KorService1
 
 logging:
   level:

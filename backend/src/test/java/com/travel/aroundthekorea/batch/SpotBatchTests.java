@@ -25,7 +25,9 @@ import com.travel.aroundthekorea.tour.domain.SpotRepository;
 
 @ActiveProfiles("test")
 @SpringBatchTest
-@SpringBootTest
+@SpringBootTest(properties = {
+	"data.url=https://apis.data.go.kr/B551011/KorService1"
+})
 class SpotBatchTests {
 
 	@Autowired
