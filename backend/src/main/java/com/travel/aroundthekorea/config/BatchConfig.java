@@ -17,7 +17,9 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -28,6 +30,8 @@ import com.travel.aroundthekorea.batch.spot.api.SpotClient;
 import com.travel.aroundthekorea.batch.spot.api.dto.response.PublicDataResponse;
 import com.travel.aroundthekorea.batch.spot.listener.JobCompletionNotificationListener;
 import com.travel.aroundthekorea.tour.domain.Spot;
+
+import jakarta.persistence.EntityManagerFactory;
 
 @EnableScheduling
 @EnableBatchProcessing
@@ -48,6 +52,12 @@ public class BatchConfig {
 			.listener(listener)
 			.start(step1)
 			.build();
+	}
+
+	@Bean
+	@Primary
+	public PlatformTransactionManager jpaTransactionManager(EntityManagerFactory entityManagerFactory) {
+		return new JpaTransactionManager(entityManagerFactory);
 	}
 
 	@Bean

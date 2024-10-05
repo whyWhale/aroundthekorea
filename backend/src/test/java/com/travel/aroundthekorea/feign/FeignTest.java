@@ -17,8 +17,11 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.travel.aroundthekorea.batch.spot.api.SpotClient;
 import com.travel.aroundthekorea.batch.spot.api.dto.response.PublicDataResponse;
+import com.travel.aroundthekorea.exception.model.feign.InvalidRequestException;
 
-@SpringBootTest
+import feign.RetryableException;
+
+@SpringBootTest(properties = {"data.url=http://localhost:8089"})
 public class FeignTest {
 
 	private final String PREFIX_PATH = "/areaBasedSyncList1";
@@ -43,16 +46,24 @@ public class FeignTest {
 	@Test
 	public void failIncorrectStatusCode() {
 		/// given
-		stubFor(buildMapping("")
+		stubFor(get(urlPathEqualTo(PREFIX_PATH))
+			.withQueryParam("numOfRows", equalTo("100"))
+			.withQueryParam("pageNo", equalTo("1"))
+			.withQueryParam("MobileOS", equalTo("ETC"))
+			.withQueryParam("MobileApp", equalTo("atk"))
+			.withQueryParam("_type", equalTo("JSON"))
+			.withQueryParam("serviceKey", equalTo("serviceKey"))
+			.withQueryParam("arrange", equalTo("D"))
 			.inScenario("RetryableException 시나리오")
 			.whenScenarioStateIs(STARTED)
-			.willReturn(aResponse().withStatus(513))
-			.willSetStateTo("Failure"));
+			.willReturn(aResponse().withStatus(500))
+		);
+
 		// when
 		// then
 		Assertions.assertThatThrownBy(() -> {
 			send();
-		}).isInstanceOf(RuntimeException.class);
+		}).hasCauseInstanceOf(RetryableException.class);
 	}
 
 	@DisplayName("잘못된 경로로 요청하면 , InvalidRequestException 예외를 발생시킨다.")
@@ -68,9 +79,11 @@ public class FeignTest {
 			.willSetStateTo("Failure"));
 		// when
 		// then
+
 		Assertions.assertThatThrownBy(() -> {
-			send();
-		}).isInstanceOf(RuntimeException.class);
+				send();
+			}).hasCauseInstanceOf(RuntimeException.class)
+			.hasCauseInstanceOf(InvalidRequestException.class);
 	}
 
 	private MappingBuilder buildMapping(String path) {

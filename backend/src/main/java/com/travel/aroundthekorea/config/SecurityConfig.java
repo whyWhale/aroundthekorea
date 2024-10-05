@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -47,11 +48,12 @@ public class SecurityConfig {
 		return http
 			.httpBasic(Customizer.withDefaults())
 			.authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/test").permitAll()
+				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/test").permitAll()
 				.anyRequest().authenticated()
 			)
-			.formLogin(form -> form.disable())
-			.logout(logout -> logout.disable())
+			.formLogin(AbstractHttpConfigurer::disable)
+			.logout(AbstractHttpConfigurer::disable)
+			.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement(session -> session
 				.sessionFixation().migrateSession()
 			)

@@ -1,5 +1,6 @@
 package com.travel.aroundthekorea.plan.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.travel.aroundthekorea.common.context.entity.BaseEntity;
@@ -24,10 +25,10 @@ public class Plan extends BaseEntity {
 	private String title;
 
 	@Column(columnDefinition = "DATE")
-	private LocalDateTime startDate;
+	private LocalDate startDate;
 
 	@Column(columnDefinition = "DATE")
-	private LocalDateTime endDate;
+	private LocalDate endDate;
 
 	@Column(name = "is_completed")
 	private Boolean isCompleted;
@@ -36,7 +37,7 @@ public class Plan extends BaseEntity {
 
 	}
 
-	public Plan(Long userId, LocalDateTime startDate, LocalDateTime endDate, String title, Boolean isCompleted) {
+	public Plan(Long userId, LocalDate startDate, LocalDate endDate, String title, Boolean isCompleted) {
 		this.userId = userId;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -52,11 +53,11 @@ public class Plan extends BaseEntity {
 		return userId;
 	}
 
-	public LocalDateTime getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public LocalDateTime getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 

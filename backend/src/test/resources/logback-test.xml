@@ -14,15 +14,23 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
-    <logger name="feign.Logger" level="TRACE" additivity="false">
+    <logger name="org.springframework.security" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <logger name="feign.Retryer" level="TRACE" additivity="false">
+    <logger name="io.github.openfeign" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 
     <logger name="io.github.resilience4j" level="TRACE" additivity="true">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false"> <!-- additivity를 false로 설정 -->
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false"> <!-- 이 부분도 수정 -->
         <appender-ref ref="CONSOLE"/>
     </logger>
 
