@@ -1,8 +1,11 @@
 package com.travel.aroundthekorea.plan.domain;
 
+import java.util.StringJoiner;
+
 import com.travel.aroundthekorea.tour.domain.Spot;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,11 +20,11 @@ public class TravelCalender {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "spot_id", referencedColumnName = "id")
 	private Spot spot;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "calender_id", referencedColumnName = "id")
 	private Calender calendar;
 
@@ -44,5 +47,14 @@ public class TravelCalender {
 
 	public Calender getCalendar() {
 		return calendar;
+	}
+
+	@Override
+	public String toString() {
+		return new StringJoiner(", ", TravelCalender.class.getSimpleName() + "[", "]")
+			.add("id=" + id)
+			.add("spot=" + spot)
+			.add("calendar=" + calendar)
+			.toString();
 	}
 }

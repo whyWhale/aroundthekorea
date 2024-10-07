@@ -1,6 +1,7 @@
 package com.travel.aroundthekorea.tour.domain;
 
 import java.time.LocalDateTime;
+import java.util.StringJoiner;
 
 import org.springframework.batch.item.Chunk;
 
@@ -98,5 +99,21 @@ public class Spot extends Chunk<Spot> {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Spot.class.getSimpleName() + "[", "]")
+            .add("id=" + id)
+            .add("title='" + title + "'")
+            .add("contentId=" + contentId)
+            .add("address='" + address + "'")
+            .add("latitude='" + latitude + "'")
+            .add("longitude='" + longitude + "'")
+            .add("image1='" + image1 + "'")
+            .add("image2='" + image2 + "'")
+            .add("category='" + category + "'")
+            .add("createdAt=" + createdAt)
+            .toString();
     }
 }

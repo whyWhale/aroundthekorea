@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.travel.aroundthekorea.exception.model.BatchException;
+import com.travel.aroundthekorea.exception.model.BusinessException;
 import com.travel.aroundthekorea.exception.model.CustomFeignException;
 import com.travel.aroundthekorea.exception.model.ErrorMessage;
 
@@ -29,6 +30,17 @@ import feign.RetryableException;
 public class GlobalExceptionHanlder {
 
 	private final Logger log = LoggerFactory.getLogger(GlobalExceptionHanlder.class);
+
+	@ExceptionHandler(BusinessException.class)
+	public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException exception) {
+		ErrorMessage errorModel = exception.getErrorModel();
+		log.error("business exception : {}", errorModel.getServer(), exception);
+		ErrorResponse response = ErrorResponse.builder(exception, HttpStatus.NOT_ACCEPTABLE, errorModel.getClient())
+			.detail(errorModel.getClient())
+			.build();
+
+		return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+	}
 
 	@ExceptionHandler(BatchException.class)
 	public ResponseEntity<ErrorResponse> handleBatchException(BatchException exception) {

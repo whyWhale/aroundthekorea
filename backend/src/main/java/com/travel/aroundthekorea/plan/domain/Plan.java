@@ -1,7 +1,6 @@
 package com.travel.aroundthekorea.plan.domain;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import com.travel.aroundthekorea.common.context.entity.BaseEntity;
 
@@ -67,5 +66,9 @@ public class Plan extends BaseEntity {
 
 	public Boolean getCompleted() {
 		return isCompleted;
+	}
+
+	public boolean isHost(Long readerId) {
+		return this.userId.equals(readerId);
 	}
 }
