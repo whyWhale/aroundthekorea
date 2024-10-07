@@ -60,6 +60,7 @@ class PlanControllerTest {
 		PlanCreateRequestDto requestDto = requestDto1;
 		long expectedPlanId = 1L;
 		given(planService.create(MOCK_USER_NAME, requestDto)).willReturn(expectedPlanId);
+
 		//when
 		ResultActions perform = getPerform(requestDto);
 

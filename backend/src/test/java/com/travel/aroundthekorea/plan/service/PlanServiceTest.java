@@ -1,82 +1,73 @@
 package com.travel.aroundthekorea.plan.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDate;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-import javax.swing.text.html.parser.Entity;
-
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.TransactionManager;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.travel.aroundthekorea.plan.controller.dto.request.PlanCreateRequestDto;
-import com.travel.aroundthekorea.plan.domain.Calender;
+import net.datafaker.Faker;
+
+import com.travel.aroundthekorea.exception.model.BusinessException;
 import com.travel.aroundthekorea.plan.domain.Plan;
 import com.travel.aroundthekorea.plan.repository.CalenderRepository;
 import com.travel.aroundthekorea.plan.repository.PlanRepository;
+import com.travel.aroundthekorea.plan.repository.ReadySupplyRepository;
+import com.travel.aroundthekorea.plan.repository.TravelCalenderRepository;
 import com.travel.aroundthekorea.user.User;
 import com.travel.aroundthekorea.user.UserRepository;
 
-import jakarta.persistence.EntityManager;
-
-@Transactional
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class PlanServiceTest {
-	@Autowired
+	@InjectMocks
 	PlanService planService;
 
-	@Autowired
+	@Mock
 	UserRepository userRepository;
 
-	@Autowired
+	@Mock
+	PlanRepository planRepository;
+
+	@Mock
 	CalenderRepository calenderRepository;
 
-	User authUser;
+	@Mock
+	TravelCalenderRepository travelCalenderRepository;
 
-	@Autowired
-	private PlanRepository planRepository;
+	@Mock
+	ReadySupplyRepository readySupplyRepository;
 
+	@Mock
+	PlanMapper planMapper;
 
-	@BeforeEach
-	public void preProcess() {
-		authUser = userRepository.save(new User(
-			"kaggle@gmail.com",
-			"{encrypt} phyphy",
-			"010-1193-0202"
-		));
-		userRepository.flush();
-		assertThat(authUser).isNotNull();
-	}
+	Faker faker = new Faker();
+
+	String AUTH_USERNAME = "kaggle@gmail.com";
 
 	@Test
-	@DisplayName("계획표 생성 후 시작날짜부터 끝나는 날까지 calender 들도 만들어준다.")
-	void testCreatePlan() {
+	@DisplayName("자신의 것이 아닌 계획표를 조회하면 예외가 발생한다")
+	void failGetPlan() {
 		//given
-		PlanCreateRequestDto planRequestDto = new PlanCreateRequestDto(
-			"떠나요 쥬쥬도",
-			LocalDate.now(),
-			LocalDate.now().plusDays(10)
-		);
+		LocalDate today = LocalDate.now();
+		long anotherUserId = 1L;
+		long invalidPlanId = 2L;
+		Plan expectedPlan = new Plan(anotherUserId, today, today.plusDays(3), faker.book().title(), false);
+		given(userRepository.findByUsername(AUTH_USERNAME)).willReturn(Optional.of(new User(AUTH_USERNAME, "", "")));
+		given(planRepository.findById(invalidPlanId)).willReturn(Optional.of(expectedPlan));
+
 		//when
-		Long planId = planService.create(authUser.getUsername(), planRequestDto);
 		//then
-
-		Plan plan = planRepository.findById(planId).orElseThrow();
-		assertThat(plan.getStartDate()).isEqualTo(planRequestDto.startDate());
-		assertThat(plan.getEndDate()).isEqualTo(planRequestDto.endDate());
-		assertThat(plan.getCompleted()).isFalse();
-
-		Set<LocalDate> dateContainer = planRequestDto.startDate().datesUntil(planRequestDto.endDate().plusDays(1))
-			.collect(Collectors.toSet());
-		calenderRepository.findByPlan(plan).stream().map(Calender::getStartDate)
-			.forEach(startDate -> assertThat(startDate).isIn(dateContainer));
+		Assertions.assertThatThrownBy(() -> {
+			planService.getPlan(AUTH_USERNAME, 2L);
+		}).isInstanceOf(BusinessException.class);
 	}
 
 }

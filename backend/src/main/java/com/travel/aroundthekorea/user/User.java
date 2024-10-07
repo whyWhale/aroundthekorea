@@ -1,5 +1,7 @@
 package com.travel.aroundthekorea.user;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.travel.aroundthekorea.common.context.entity.BaseEntity;
 
 import jakarta.persistence.AttributeOverride;
@@ -18,6 +20,8 @@ public class User extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(unique = true)
 	private String username;
 	private String password;
 	private String phoneNumber;

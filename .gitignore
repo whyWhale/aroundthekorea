@@ -35,7 +35,7 @@ replay_pid*
 docs/_book
 
 # TODO: where does this rule come from?
-test/
+
 
 ### Gradle template
 .gradle
